@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     public GameObject aim;
     public GameObject youDeadScreen;
     public SandBallCaster sandBallCaster;
+    public SandGrenadeCaster sandGrenadeCaster;
 
     public Image healthValue1;
     public Image healthValue2;
@@ -27,7 +28,31 @@ public class PlayerHealth : MonoBehaviour
     public void DealDamage(float damage) {
         //damage player
         value -= damage;
+        DrawHealthUI();
 
+        //"you dead screen" and health 0 UI
+        if (value <= 0) {
+            //"you dead screen" (screen)
+            youDeadScreen.gameObject.SetActive(true);
+            aim.gameObject.SetActive(false);
+            //"you dead screen" (disabled control)
+            GetComponent<PlayerController>().enabled = false;
+            GetComponent<CameraRotation>().enabled = false;
+            sandBallCaster.enabled = false;
+            sandGrenadeCaster.enabled = false;
+
+            //health 0 UI
+            healthValue1.sprite = sprite0;
+        }
+    }
+
+    public void AddHealth(int amount) {
+        value += amount;
+        value = Mathf.Clamp(value, 0, 100);
+        DrawHealthUI();
+    }
+
+    private void DrawHealthUI() {
         //health UI
         healthValue2.gameObject.SetActive(false);
         //health 10 UI
@@ -70,19 +95,6 @@ public class PlayerHealth : MonoBehaviour
         //health 1 UI
         if (value <= 10 && value > 0) {
             healthValue1.sprite = sprite1;
-        }
-        //"you dead screen" and health 0 UI
-        if (value <= 0) {
-            //"you dead screen" (screen)
-            youDeadScreen.gameObject.SetActive(true);
-            aim.gameObject.SetActive(false);
-            //"you dead screen" (disabled control)
-            GetComponent<PlayerController>().enabled = false;
-            GetComponent<CameraRotation>().enabled = false;
-            sandBallCaster.GetComponent<SandBallCaster>().enabled = false;
-
-            //health 0 UI
-            healthValue1.sprite = sprite0;
         }
     }
 }

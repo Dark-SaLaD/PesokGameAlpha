@@ -11,17 +11,18 @@ public class CameraRotation : MonoBehaviour
     public int CameraRotationSpeed;
 
     void Start() {
+        //cursor lock
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
-    {
+    void Update() {
+        //rotate left-riht
         transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y + Time.deltaTime * CameraRotationSpeed * Input.GetAxis("Mouse X"), 0);
 
+        //rotate top-down
         var newAngleX = CameraAxisTransform.localEulerAngles.x - Time.deltaTime * CameraRotationSpeed * Input.GetAxis("Mouse Y");
-        if(newAngleX > 180)
-        {
+        if(newAngleX > 180) {
             newAngleX -= 360;
         }
         newAngleX = Mathf.Clamp(newAngleX, minAngle, maxAngle);
